@@ -20,19 +20,30 @@ class HomeTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+         self.loadTweets()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        loadTweets()
+        //self.loadTweets()
         myRefreshController.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         tableView.refreshControl = myRefreshController
         
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 150
+        
+        
+        
     }
     
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweets()
+        //myRefreshController.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
+        //tableView.refreshControl = myRefreshController
+    }
     
     
     @objc func loadTweets() {
@@ -108,6 +119,17 @@ class HomeTableViewController: UITableViewController {
         if let imageData  = data {
             cell.profileImageView.image = UIImage(data: imageData)
         }
+        
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
+        
+//
+//        if(tweetArray[indexPath.row]["entities"]["media"] as NSDictionary != [:]) {
+//
+//
+//        }
+        
         
         return cell
     }
